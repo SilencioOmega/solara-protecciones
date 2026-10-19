@@ -1,0 +1,28 @@
+name: Compilador Oficial Solara
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clonando Repositorio
+      uses: actions/checkout@v4
+
+    - name: Configurando Java JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: 'maven'
+
+    - name: Compilando Plugin de Protecciones
+      run: mvn -B package --file pom.xml
+
+    - name: Guardar Archivo JAR Final
+      uses: actions/upload-artifact@v4
+      with:
+        name: SolaraProtecciones-JAR
+        path: target/*.jar
